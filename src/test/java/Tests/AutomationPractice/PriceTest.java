@@ -15,6 +15,7 @@ import java.util.List;
 public class PriceTest extends TestBase {
     String baseURL = "http://automationpractice.com/index.php";
     String cssSelector = "ul[id='homefeatured'] div[class='right-block'] span[class='price product-price']";
+    //#homefeatured .right-block .price
 
     @Test
     @DisplayName("Printing prices from main page")

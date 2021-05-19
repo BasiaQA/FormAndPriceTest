@@ -72,6 +72,8 @@ public class FormTest extends TestBase {
 
         getDriver().findElement(By.id("additionalInformations")).sendKeys(inf);
 
+        getDriver().findElement(By.cssSelector(".btn-secondary")).click();
+
         getDriver().findElement(By.xpath("//button[@type=('submit')]")).click();
 
         WebElement msg = getDriver().findElement(By.id("validator-message"));

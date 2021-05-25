@@ -23,6 +23,7 @@ public class TestBase {
         WebDriverManager.chromedriver().setup();
         options.addArguments("start-maximized");
         driver = new ChromeDriver(options);
+
     }
 
     @AfterEach

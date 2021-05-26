@@ -36,23 +36,21 @@ public class DataPickerTest extends TestBase {
         getDriver().findElement(By.id("datepicker")).click();
 
         while (true) {
-            int displayedYear =getDisplayedYear();
-            if (displayedYear < expectedYear) {
+            if (getDisplayedYear() < expectedYear) {
                 getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-next ui-corner-all')]")).click();
-            } else if (displayedYear > expectedYear) {
+            } else if (getDisplayedYear() > expectedYear) {
                 getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-prev ui-corner-all')]")).click();
             } else
                 break;
         }
 
         while (true) {
-            int displayedMonth =getDisplayedMonth();
-                if (displayedMonth < expectedMonth) {
-                    getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-next ui-corner-all')]")).click();
-                } else if (displayedMonth > expectedMonth) {
-                    getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-prev ui-corner-all')]")).click();
-                } else
-                    break;
+            if (getDisplayedMonth() < expectedMonth) {
+                getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-next ui-corner-all')]")).click();
+            } else if (getDisplayedMonth() > expectedMonth) {
+                getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-prev ui-corner-all')]")).click();
+            } else
+                break;
         }
 
         List<WebElement> dayElements = getDriver().findElements(By.xpath("//td/a[contains(@class,'ui-state-default')and not(contains(@class,'ui-priority-secondary'))]"));
@@ -103,7 +101,7 @@ public class DataPickerTest extends TestBase {
         int actualMonth = 0;
         for (int index = 1; index < months.length; index++) {
             if (months[index].equals(monthValue)) {
-                actualMonth = index+1;
+                actualMonth = index + 1;
                 break;
             }
         }

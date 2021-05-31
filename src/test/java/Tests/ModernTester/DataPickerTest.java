@@ -1,6 +1,7 @@
 package Tests.ModernTester;
 
 import TestBase.TestBase;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -8,8 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static org.apache.commons.lang3.ArrayUtils.indexOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -26,9 +29,11 @@ public class DataPickerTest extends TestBase {
         moveTo(1, 12, 2020);
         moveTo(25, 12, 2020);
         moveTo(1, 2, 2022);
-        moveTo(Integer.parseInt(LocalDate.now().toString().substring(8)), Integer.parseInt(LocalDate.now().toString().substring(5, 7)), Integer.parseInt(LocalDate.now().toString().substring(0, 4)));
 
-
+        LocalDate date = LocalDate.now();
+        String dateText = date.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
+        String[] actualDate = dateText.split(" ");
+        moveTo(Integer.parseInt(actualDate[0]), Integer.parseInt(actualDate[1]), Integer.parseInt(actualDate[2]));
     }
 
     private void moveTo(int expectedDay, int expectedMonth, int expectedYear) throws InterruptedException {
@@ -37,18 +42,18 @@ public class DataPickerTest extends TestBase {
 
         while (true) {
             if (getDisplayedYear() < expectedYear) {
-                getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-next ui-corner-all')]")).click();
+                goNext();
             } else if (getDisplayedYear() > expectedYear) {
-                getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-prev ui-corner-all')]")).click();
+                goPrev();
             } else
                 break;
         }
 
         while (true) {
             if (getDisplayedMonth() < expectedMonth) {
-                getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-next ui-corner-all')]")).click();
+                goNext();
             } else if (getDisplayedMonth() > expectedMonth) {
-                getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-prev ui-corner-all')]")).click();
+                goPrev();
             } else
                 break;
         }
@@ -61,12 +66,11 @@ public class DataPickerTest extends TestBase {
             }
         }
 
-        String expectedDayFormatted = getExpectedDayFormatted(expectedDay);
-        String expectedMonthFormatted = getExpectedMonthFormatted(expectedMonth);
+        String expectedDayFormatted = getExpectedDateFormatted(expectedDay);
+        String expectedMonthFormatted = getExpectedDateFormatted(expectedMonth);
 
         assertThat(getDriver().findElement(By.id("datepicker")).getAttribute("value"), equalTo(expectedMonthFormatted + "/" + expectedDayFormatted + "/" + expectedYear));
     }
-
 
     private int getDisplayedYear() {
         WebDriverWait wait = new WebDriverWait(getDriver(), 15);
@@ -75,36 +79,27 @@ public class DataPickerTest extends TestBase {
         return Integer.parseInt(yearValue);
     }
 
-    private String getExpectedDayFormatted(int day) {
-        String expectedDayFormatted = "";
-        if (day < 10) {
-            expectedDayFormatted = "0" + day;
+    private String getExpectedDateFormatted(int value) {
+        String expectedDateFormatted = "";
+        if (value < 10) {
+            expectedDateFormatted = "0" + value;
         } else {
-            expectedDayFormatted = Integer.toString(day);
+            expectedDateFormatted = Integer.toString(value);
         }
-        return expectedDayFormatted;
-    }
-
-    private String getExpectedMonthFormatted(int month) {
-        String expectedMonthFormatted = "";
-        if (month < 10) {
-            expectedMonthFormatted = "0" + month;
-        } else {
-            expectedMonthFormatted = Integer.toString(month);
-        }
-        return expectedMonthFormatted;
+        return expectedDateFormatted;
     }
 
     private int getDisplayedMonth() {
         String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         String monthValue = getDriver().findElement(By.className("ui-datepicker-month")).getText();
-        int actualMonth = 0;
-        for (int index = 1; index < months.length; index++) {
-            if (months[index].equals(monthValue)) {
-                actualMonth = index + 1;
-                break;
-            }
-        }
-        return actualMonth;
+        return indexOf(months, monthValue) + 1;
+    }
+
+    private void goNext() {
+        getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-next ui-corner-all')]")).click();
+    }
+
+    private void goPrev() {
+        getDriver().findElement(By.xpath("//a[contains(@class,'ui-datepicker-prev ui-corner-all')]")).click();
     }
 }

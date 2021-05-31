@@ -14,21 +14,14 @@ import java.util.Random;
 public class IframeTests2 extends TestBase {
     private static Logger logger = LoggerFactory.getLogger("IframeTests2.class");
 
-    String url;
-    String firstName;
-    String lastName;
-    String login;
-    String password;
-    int continentIndex;
-
     @Test
     public void shouldFillForm() throws InterruptedException {
-        url = "https://seleniumui.moderntester.pl/iframes.php";
-        firstName = "Jan";
-        lastName = "Kowalski";
-        login = "J.Kowalski";
-        password = "test1234";
-        continentIndex = 1;
+        String url = "https://seleniumui.moderntester.pl/iframes.php";
+        String firstName = "Jan";
+        String lastName = "Kowalski";
+        String login = "J.Kowalski";
+        String password = "test1234";
+        int continentIndex = 1;
 
         getDriver().get(url);
         logger.info("Webpage url: " + url);

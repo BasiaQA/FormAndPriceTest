@@ -23,24 +23,24 @@ public class SliderTest extends TestBase {
 
     private void moveTo(int expectedSliderValue) {
 
-        WebElement slider = getDriver().findElement(By.id("custom-handle"));
-
         int actualSliderValue = getSliderValue();
 
         if (actualSliderValue < expectedSliderValue) {
-            for (int i = 0; i < (expectedSliderValue - actualSliderValue); i++) {
-                slider.sendKeys(Keys.ARROW_RIGHT);
-            }
+            move(expectedSliderValue, Keys.ARROW_RIGHT);
         } else if (actualSliderValue > expectedSliderValue) {
-            for (int i = 0; i < (actualSliderValue - expectedSliderValue); i++) {
-                slider.sendKeys(Keys.ARROW_LEFT);
-            }
+            move(expectedSliderValue, Keys.ARROW_LEFT);
         }
         assertThat(getSliderValue(), equalTo(expectedSliderValue));
     }
 
     private int getSliderValue() {
-        String sliderValue = getDriver().findElement(By.id("custom-handle")).getText();
-        return Integer.parseInt(sliderValue);
+        return Integer.parseInt(getDriver().findElement(By.id("custom-handle")).getText());
+    }
+
+    public void move(int expectedSliderValue, Keys key) {
+        int actualSliderValue = getSliderValue();
+        for (int i = 0; i < Math.abs(expectedSliderValue - actualSliderValue); i++) {
+            getDriver().findElement(By.id("custom-handle")).sendKeys(key);
+        }
     }
 }
